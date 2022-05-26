@@ -1,11 +1,11 @@
 # WARNING
 
-~~**Running this counts as self-botting and is prohibited by Discord's TOS. While you are probably fine running this, there is a small chance your account is getting flagged as a self-bot and eventually terminated.**~~
+~~**Running this counts as self-botting and is prohibited by Discord's TOS. While you are probably fine running this, there is a small chance your account is getting flagged as a self-bot and eventually terminated.**~~\
 Well it kinda is self-botting but running it in the client isn't as dangerous
 
 **Use at your own risk.**
 
-~~**In general never share your user token with any program unless you fully understand how it works and what it does.**~~
+~~**In general never share your user token with any program unless you fully understand how it works and what it does.**~~\
 You no longer have to handle copy pasting tokens
 
 I don't take any responsibility for any potential damage done by running this program.
@@ -21,9 +21,10 @@ I don't take any responsibility for any potential damage done by running this pr
 ## note
 
 ~~This code is utter trash and all but I can't be bothered cleaning any of this up since it works and that's all it needs to do.~~
+
 This code is not at all utter trash, i spent effort writing this snippet,
 if you are concerned about the safety of this snippet then read the comments or
-show it a trustable js dev who can guarantee you that this snippet is not at all malicious
+show it to a trustable js dev who can guarantee you that this snippet is not at all malicious
 
 ~~It is a personal project that served it's purpose and I am not planning
 on making any updates or improving the ux. If you can't get it to run
