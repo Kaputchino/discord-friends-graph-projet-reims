@@ -17,7 +17,7 @@
             const obj = module.exports[prop]
             if (obj && typeof obj === "object" && "getAPIBaseURL" in obj) {
                 property = prop
-                break
+                return true
             }
         }
     }
