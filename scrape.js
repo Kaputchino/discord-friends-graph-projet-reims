@@ -1,4 +1,4 @@
-(async () => {
+(async () => {  
   // Get all modules
   webpackChunkdiscord_app.push([["meow"], {}, e => { mods = Object.values(e.c) }]);
   // Removed the pushed array, not really necessary
@@ -9,7 +9,19 @@
   let out_mappings = []
 
   // Discord's internal request module
-  const requestModule = mods.find(e => e?.exports?.default?.getAPIBaseURL).exports.default;
+  let property;
+  const requestModule = mods.find(module => {
+    if (typeof module?.exports !== "undefined") {
+        const props = Object.getOwnPropertyNames(module.exports)
+        for (const prop of props) {
+            const obj = module.exports[prop]
+            if (obj && typeof obj === "object" && "getAPIBaseURL" in obj) {
+                property = prop
+                break
+            }
+        }
+    }
+  }).exports[property];
 
   // Just a helper method to get relationships
   const getUser = async (id) => {
