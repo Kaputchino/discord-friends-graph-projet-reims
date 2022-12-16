@@ -14,9 +14,11 @@ I don't take any responsibility for any potential damage done by running this pr
 
 1. Copy all the contents of `scrape.js`
 2. Open discord & open devtools, if you are on stable then [read this](https://twitter.com/DiscordPreviews/status/1486003718063632386)
-3. Wait...
-4. Copy the output after the "`Done, copy the following output and paste it in scraped.json`" message and paste it in `scraped.json`
-5. Run `node ./view.js [port]` and open the link
+3. Paste the script you copied.
+4. Wait...
+5. Copy the output after the "`Done, copy the following output and paste it in scraped.json`"
+6. Create a file called `scraped.json` & paste the copied output in there
+7. Run `node ./view.js [port]` and open the link
 
 ## note
 
