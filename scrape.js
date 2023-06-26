@@ -1,3 +1,9 @@
+function delay(milliseconds){
+    return new Promise(resolve => {
+        setTimeout(resolve, milliseconds);
+    });
+}
+
 (async () => {  
   // Get all modules
   webpackChunkdiscord_app.push([["meow"], {}, e => { mods = Object.values(e.c) }]);
@@ -35,6 +41,8 @@
 
   // Loop through each friend
   for (const [index, friend] of selfRelationships.entries()) {
+      await delay(1000);
+
     console.log(`Fetching mutuals for ${friend.id} => ${friend.nickname || friend.user.username} (${index + 1} out of ${selfRelationships.length})`);
     // Ne need to filter, always returns type 1
     let friendMutuals = await getUser(friend.id);
