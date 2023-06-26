@@ -1,60 +1,54 @@
+(async () => {  
+  // Get all modules
+  webpackChunkdiscord_app.push([["meow"], {}, e => { mods = Object.values(e.c) }]);
+  // Removed the pushed array, not really necessary
+  webpackChunkdiscord_app.splice(webpackChunkdiscord_app.length - 1, 1)
 
-const token = process.argv[2]
-if (!token) throw 'Please provide a user-token!'
+  // CSV thingies
+  let out = []
+  let out_mappings = []
 
-const startingPoints = [ '@me' ]
-
-//
-
-const processed = new Set()
-const queue = []
-const out = []
-const mappings = new Map()
-
-async function analyze(user) {
-  if (processed.has(user)) return
-  processed.add(user)
-  console.log('-> ' + user)
-
-  const u = (await fetchUser(user))
-  const rels = u.filter(u => (!u.type || u.type === 1))
-  queue.push(...rels.map(u => u.id))
-  out.push(`${user},${rels.map(r => r.id).join(',')}`)
-
-  for (const rel of rels) {
-    if (!mappings.has(rel.id))
-      mappings.set(rel.id, rel)
-  }
-}
-
-async function fetchUser(id) {
-  const { data } = await require('axios').get(`https://canary.discord.com/api/v9/users/${id}/relationships`, {
-    headers: {
-      authorization: token,
-      accept: '*/*',
-      'accept-language': 'en-GB',
-      referer: 'https://canary.discord.com/channels/@me',
-      'sec-fetch-dest': 'empty',
-      'sec-fetch-mode': 'cors',
-      'sec-fetch-site': 'same-origin',
-      'user-agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) discord/1.0.43 Chrome/91.0.4472.164 Electron/13.6.6 Safari/537.36',
-      'x-discord-locale': 'en-GB'
+  // Discord's internal request module
+  let property;
+  const requestModule = mods.find(module => {
+    if (typeof module?.exports !== "undefined") {
+        const props = Object.getOwnPropertyNames(module.exports)
+        for (const prop of props) {
+            const obj = module.exports[prop]
+            if (obj && typeof obj === "object" && "getAPIBaseURL" in obj) {
+                property = prop
+                return true
+            }
+        }
     }
-  })
-  return data
-}
+  }).exports[property];
 
-//
+  // Just a helper method to get relationships
+  const getUser = async (id) => {
+    return (await requestModule.get({ url: `/users/${id}/relationships`, oldFormErrors: !0 })).body;
+  }
 
-async function start() {
-  queue.push(...startingPoints)
-  while (queue.length)
-    await analyze(queue.splice(0, 1)[0])
-  require('fs').writeFileSync('./out.csv', out.join('\n'))
+  // Get the current user's friends, type 1 is friend
+  let selfRelationships = (await getUser("@me")).filter(rel => rel.type === 1);
+  // Push to CSV data
+  out.push(`@me,${selfRelationships.map(rel => rel.id).join()}`)
 
-  const outmap = [...mappings.entries()]
-    .map(([k, v]) => `${k},${v.user.username},${v.user.avatar}`)
-    .join('\n')
-  require('fs').writeFileSync('./out-mappings.csv', outmap)
-}
-start()
+  // Loop through each friend
+  for (const [index, friend] of selfRelationships.entries()) {
+    console.log(`Fetching mutuals for ${friend.id} => ${friend.nickname || friend.user.username} (${index + 1} out of ${selfRelationships.length})`);
+    // Ne need to filter, always returns type 1
+    let friendMutuals = await getUser(friend.id);
+
+    // Map the mutuals to their ids and names and avatars
+    out.push(`${friend.id},${friendMutuals.map(rel => rel.id).join()}`);
+    // Nickname support, if you were one of the few who actually
+    // used it I wont question how you got friend nicknames to be enabled for you
+    out_mappings.push(`${friend.id},${friend.nickname || friend.user.username},${friend.user.avatar}`);
+  }
+
+  console.log("Done, copy the following output and paste it in scraped.json")
+  console.log(JSON.stringify({
+    out: out.join("\n"),
+    out_mappings: out_mappings.join("\n")
+  }));
+})();
