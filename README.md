@@ -46,3 +46,7 @@ Well I updated shit
 
 ![screenshot](https://cdn.discordapp.com/attachments/816810550519660584/934757323547754526/unknown.png)
 *(names in this screenshot are hidden for privacy)*
+
+## fix
+
+I added "await delay(1000);" to avoid in order to avoid rate limit
