@@ -49,4 +49,4 @@ Well I updated shit
 
 ## fix
 
-I added "await delay(1000);" to avoid in order to avoid rate limit
+I added "await delay(1000);" in order to avoid rate limitation 
